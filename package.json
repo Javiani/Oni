@@ -1,0 +1,38 @@
+{
+	"name": "pandora",
+	"version": "1.0.0",
+	"description": "Pandora is an agnostic and simple State Managment library for Javascript Applications",
+	"main": "index.js",
+	"scripts": {
+		"start": "webpack --watch --mode=development",
+		"build": "webpack --mode=production",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Javiani/Pandora"
+	},
+	"keywords": [
+		"Pandora",
+		"State Management",
+		"Javascript Architecture",
+		"Micro-Library"
+	],
+	"author": "javiani",
+	"license": "MIT",
+	"homepage": "https://github.com/Javiani/Pandora",
+	"devDependencies": {
+		"@babel/core": "^7.2.2",
+		"@babel/preset-env": "^7.2.3",
+		"@babel/preset-react": "^7.18.6",
+		"babel-loader": "^8.0.5",
+		"babel-preset-env": "^1.7.0",
+		"ts-loader": "^9.2.6",
+		"typescript": "^4.5.4",
+		"webpack": "^5.59.1",
+		"webpack-cli": "^3.2.1"
+	},
+	"peerDependencies": {
+		"react": "^18.0.0"
+	}
+}
