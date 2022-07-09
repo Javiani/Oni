@@ -84,7 +84,7 @@ export default function MyComponent() {
   const { state, action, payload, dispatch, unsubscribe, subscribe } = useStore(store)
 
   const onButtonClick = (e) => {
-      dispatch('COUNT_ADD', 5)
+      dispatch('COUNTER_ADD', 5)
       // After dispatch:
       // action will be : COUNT_ADD
       // payload will be: 5
