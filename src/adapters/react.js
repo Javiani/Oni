@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 
 export const useStore = (store) => {
 
-	const [state, setState] = useState({
+	const [data, setData] = useState({
 		state: store.getState(),
-		action: { type: null, payload: null }
+		action: '',
+		payload: null
 	})
 
 	const update = (s, { action, payload }) => {
-		setState({ state: s, action: { type: action, payload } })
+		setData({ state: s, action, payload })
 	}
 
 	useEffect(_ => {
@@ -17,7 +18,9 @@ export const useStore = (store) => {
 	})
 
 	return {
-		data: state,
+		state: data.state,
+		action: data.action,
+		payload: data.payload,
 		dispatch: store.dispatch,
 		unsubscribe: store.unsubscribe,
 		subscribe: store.subscribe
