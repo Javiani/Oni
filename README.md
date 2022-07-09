@@ -8,16 +8,28 @@
 <br />
 <br />
 
-## Installing
+## Main Advantages 🎖
+
+1. Simplicity, easy to use and understand
+2. You have access to any level of properties of your state tree, so after an action being fired you can update a state that has some sort of relationship with another state property.
+3. Agnostic, it should be able and compatible with any frameworks and vanilla javascript, trying to be obiquos.
+4. Easy to test and isomorphic. Actions are pure functions and state a JSON object, you can test it with any testing libraries without any dependencies.
+
+<br />
+<br />
+
+## Installing ⚡️
 
 `yarn add pandora` or `npm install pandora`
 <br />
 <br />
 <br />
 
-## Creating a Store instance 
 
-`/src/stores/my-store.js`
+
+## Creating a Store instance 🕋
+
+`./src/stores/my-store.js`
 
 ```js
 import pandora from 'pandora'
@@ -51,10 +63,10 @@ First parameter is the serializable object initialState, the second is a collect
 <br />
 
 
-## Using the store instance
+## Using the store instance 👩🏻‍💻
 
 ```js
-import store from './stores/my-store'
+import store from './src/stores/my-store.js'
 
 // Subscribe a function that will be called after every dispatch call
 store.subscribe( ( (state, { action, payload }) => console.log( state, action, payload ) 
@@ -70,13 +82,13 @@ store.unsubscribe( Function ) // Removes that subscriber function from update fu
 <br />
 <br />
 
-## React Adapter
+## React Adapter 🔌
 
 You can use the React Hook adapter in order to use it on your React applications preserving the code design of the framework.
 
 ```jsx
 import { useStore } from 'pandora/react'
-import store from './my-store'
+import store from './src/stores/my-store.js'
 
 export default function MyComponent() {
   
@@ -99,4 +111,3 @@ export default function MyComponent() {
   )
 }
 ```
-
