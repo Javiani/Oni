@@ -8,7 +8,9 @@
 ## Installing
 
 `yarn add pandora` or `npm install pandora`
-
+<br />
+<br />
+<br />
 
 ## Creating a Store instance 
 
@@ -41,6 +43,10 @@ First parameter is the serializable object initialState, the second is a collect
 > 💡 You don't have to return all properities inside an action, only the ones you want to update.
 
 
+<br />
+<br />
+<br />
+
 ## Using the store instance
 
 ```js
@@ -57,6 +63,9 @@ store.getState()
 store.unsubscribe( Function ) // Removes that subscriber function from update function list.
 ```
 
+<br />
+<br />
+<br />
 
 ## React Adapter
 
