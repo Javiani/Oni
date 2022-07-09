@@ -5,6 +5,9 @@
 	<img src="https://img.shields.io/npm/v/Pandora?style=flat-square" />
 </p>
 
+<br />
+<br />
+
 ## Installing
 
 `yarn add pandora` or `npm install pandora`
@@ -39,13 +42,14 @@ export const store = pandora( initialState, {
 
 First parameter is the serializable object initialState, the second is a collection of `actions` that you can name using your own pattern and getting payload from a **dispatch** that will be explained further.
 
+<br />
  
 > 💡 You don't have to return all properities inside an action, only the ones you want to update.
 
 
 <br />
 <br />
-<br />
+
 
 ## Using the store instance
 
@@ -63,7 +67,6 @@ store.getState()
 store.unsubscribe( Function ) // Removes that subscriber function from update function list.
 ```
 
-<br />
 <br />
 <br />
 
