@@ -1,3 +1,7 @@
+<br />
+<br />
+<br />
+
 <h1 align="center">Pandora 🕋</h1>
 <p align="center">Agnostic & Simple State Managing library for Javascript Applications</p>
 <p align="center">
@@ -5,6 +9,7 @@
 	<img src="https://img.shields.io/npm/v/Pandora?style=flat-square" />
 </p>
 
+<br />
 <br />
 <br />
 
