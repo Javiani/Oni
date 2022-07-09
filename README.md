@@ -15,10 +15,10 @@
 
 ## Main Advantages 🎖
 
-1. Simplicity, easy to use and understand
-2. You have access to any level of properties of your state tree, so after an action being fired you can update a state that has some sort of relationship with another state property.
-3. Agnostic, it should be able and compatible with any frameworks and vanilla javascript, trying to be obiquos.
-4. Easy to test and isomorphic. Actions are pure functions and state a JSON object, you can test it with any testing libraries without any dependencies.
+1. **Simplicity**, easy to use and understand
+2. **Flexibility**, you have access to any level of properties of your state tree, so after an action being fired you can update a state that has some sort of relationship with another state property.
+3. **Agnostic**, it should be compatible with any frameworks and vanilla javascript, aiming ubiquity.
+4. **Testing ready**, easy to test and isomorphic. Actions are pure functions and state a JSON object, you can test it with any testing libraries without any dependencies.
 
 <br />
 <br />
