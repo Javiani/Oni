@@ -34,10 +34,8 @@ export default function pandora(initialState: Object, actions: Object) {
 			if (!(action in actions)) {
 				console.log(`[Pandora] Error -> No action [ ${action} ] found.`)
 			} else {
-				Object.assign(
-					state,
-					actions[action].call(null, state, payload, { getState, subscribe, unsubscribe, dispatch })
-				)
+				const data = actions[action].call(null, state, payload, { getState, subscribe, unsubscribe, dispatch })
+				Object.assign(state, data)
 			}
 		})
 
