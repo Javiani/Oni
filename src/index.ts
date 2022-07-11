@@ -3,6 +3,10 @@ interface Params {
 	payload: object | null | undefined
 }
 
+interface Action {
+	type: string
+}
+
 export default function pandora(initialState: Object, actions: Object) {
 
 	let topics: Array<Function> = []
@@ -23,7 +27,8 @@ export default function pandora(initialState: Object, actions: Object) {
 		topics = topics.filter(item => item != fn)
 	}
 
-	const dispatch = (action: string, payload: object) => {
+	const dispatch = ({ type, ...payload }: Action) => {
+		const action = type
 		updates.push({ action, payload })
 		return new Promise((resolve) => rAF(_ => update({ action, payload }, resolve)))
 	}
