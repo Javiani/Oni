@@ -33,6 +33,14 @@ export default function pandora(initialState: Object, actions: Object) {
 		return new Promise((resolve) => rAF(_ => update({ action, payload }, resolve)))
 	}
 
+	const patternMatch = (mapfn) => {
+		subscribe((s, { action, payload }) => {
+			if (action in mapfn) {
+				mapfn[action].call(null, s, { action, payload })
+			}
+		})
+	}
+
 	const update = ({ action, payload = {} }: Params, resolve): void => {
 
 		updates.forEach(({ action, payload = {} }: Params) => {
@@ -56,7 +64,8 @@ export default function pandora(initialState: Object, actions: Object) {
 		getState,
 		subscribe,
 		unsubscribe,
-		dispatch
+		dispatch,
+		patternMatch
 	}
 }
 
