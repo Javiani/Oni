@@ -1,9 +1,8 @@
 <br />
 <br />
 <br />
-<img src="./logo.svg" />
+<img src="./hero.png" />
 
-<h1 align="center" style="display:none">Oni.js</h1>
 <p align="center">Agnostic & Simple State Managing library for Javascript Applications</p>
 <p align="center">
   <img src="https://img.shields.io/npm/l/onijs?style=flat-square" />
