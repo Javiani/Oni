@@ -139,7 +139,7 @@ export default function MyComponent() {
 }
 ```
 
-## Pattern Matching
+## Pattern Matching ⟦⟧
 Every `dispatch` calls will force an update in the store that will notify all subscribers. So in order to specify a specific action you wanna a component respond to, you can use a switch case to test the action in the callback function, or you can use the `.patternMatch` api instead of `subscribe`.
 
 ```js
