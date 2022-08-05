@@ -3,11 +3,7 @@ interface Params {
 	payload: object | null | undefined
 }
 
-interface Action {
-	type: string
-}
-
-export default function pandora(initialState: Object, actions: Object) {
+export default function Oni(initialState: Object, actions: Object) {
 
 	let topics: Array<Function> = []
 	let updates: Array<any> = []
@@ -27,8 +23,7 @@ export default function pandora(initialState: Object, actions: Object) {
 		topics = topics.filter(item => item != fn)
 	}
 
-	const dispatch = ({ type, ...payload }: Action) => {
-		const action = type
+	const dispatch = (action: string, payload) => {
 		updates.push({ action, payload })
 		return new Promise((resolve) => rAF(_ => update({ action, payload }, resolve)))
 	}
@@ -45,7 +40,7 @@ export default function pandora(initialState: Object, actions: Object) {
 
 		updates.forEach(({ action, payload = {} }: Params) => {
 			if (!(action in actions)) {
-				console.log(`[Pandora] Error -> No action [ ${action} ] found.`)
+				console.log(`[Oni] Error -> No action [ ${action} ] found.`)
 			} else {
 				const data = actions[action].call(null, state, payload, { getState, subscribe, unsubscribe, dispatch })
 				Object.assign(state, data)
