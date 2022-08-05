@@ -139,6 +139,32 @@ export default function MyComponent() {
 }
 ```
 
+## Pattern Matching
+Every `dispatch` calls will force an update in the store that will notify all subscribers. So in order to specify a specific action you wanna a component respond to, you can use a switch case to test the action in the callback function, or you can use the `.patternMatch` api instead of `subscribe`.
+
+```js
+store.patternMatch({
+	COUNTER_ADD : (state) => doSomethingOnAddCount( state.counter ),
+	COUNTER_SUBTRACT: (state) => doAnotherThing( state.counter )
+})
+```
+
+The code above is equivalent to:
+
+```js 
+store.subscribe( (state, { action, payload }) =>{
+	switch( action ) {
+		case 'COUNTER_ADD': 
+			doSomethingOnAddCount(state.counter)
+		break
+		case 'COUNTER_SUBTRACT': 
+			doAnotherThing(state.counter) 
+		break
+	}
+})
+
+```
+
 ## Composing Actions Architecture 💡
 
 We recomend you to always use 1 store for your application, but you can have several contexts and putting all the actions in the same store won't scale. 
@@ -225,9 +251,9 @@ const actions = {
 }
 
 ```
-As you can see, the third parameter gets the Oni instance, so you can call another `action` from there, we belive that's the best way to any other developer figure out just by looking at the action what is gonna be the next step.
+As you can see, the third parameter provides the Oni instance, so you can call another `action` from there, we belive that's the best way to any other developer figure out just by looking at the action what is gonna be the next step.
 
-There are other ways to do the same thing we did in the code above, if you want to let your actions pure, you can make the service call from a component and delegate to the action only the state changes of your application:
+There are other ways to do the same thing we did in the code above, if you want to let your actions pure, you can make the service call from a component and delegate to the action only the orchestration of the state transitions of your application:
 
 ```js
 const actions = {
@@ -248,6 +274,8 @@ const actions = {
 }
 
 ```
+
+The use case above is telling us that some part of the application make a request, so the store updated the UI loading state, while it waits for the response, which when is resolved it will update UI with loading state set to `false` and the product list provided by the request.
 
 ## What about Async functions? 🧐
 
