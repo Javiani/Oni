@@ -1,7 +1,7 @@
 <br />
 <br />
 <br />
-<img src="logo.svg" />
+<img src="./logo.svg" />
 
 <h1 align="center" style="display:none">Oni.js</h1>
 <p align="center">Agnostic & Simple State Managing library for Javascript Applications</p>
@@ -124,11 +124,11 @@ export default function MyComponent() {
   const { state, action, payload, dispatch, unsubscribe, subscribe } = useStore(store)
 
   const onButtonClick = (e) => {
-		dispatch('COUNTER_ADD', { increment: 5 })
-		// After dispatch:
-		// action will be : COUNT_ADD
-		// payload will be: { increment: 5 }
-		// state will be current state
+    dispatch('COUNTER_ADD', { increment: 5 })
+    // After dispatch:
+    // action will be : COUNT_ADD
+    // payload will be: { increment: 5 }
+    // state will be current state
   }
 
   return (
@@ -170,25 +170,25 @@ import Oni from 'onijs'
 
 export default function createStore( extInitialState, extActions ) {
 
-	const initialState = {
-		// If you wanna retrieve state from localStorage by default
-		...JSON.parse( localStorage.getItem('my-store') || {}), 
-		// Extending initialState with more properties depending on Page / Context you are
-		...extInitialState
-	}
+  const initialState = {
+    // If you wanna retrieve state from localStorage by default
+    ...JSON.parse( localStorage.getItem('my-store') || {}), 
+    // Extending initialState with more properties depending on Page / Context you are
+    ...extInitialState
+  }
 
-	const actions = {
-		...extActions
-	}
+  const actions = {
+    ...extActions
+  }
 
-	const store = Oni( initialState, actions )
+  const store = Oni( initialState, actions )
 
-	// If you wanna save your store whenever it updates
-	store.subscribe((state) => {
-		localstorage.setItem('my-store', JSON.stringify(state))
-	})
+  // If you wanna save your store whenever it updates
+  store.subscribe((state) => {
+    localstorage.setItem('my-store', JSON.stringify(state))
+  })
 
-	return store
+  return store
 }
 ```
 
@@ -205,46 +205,47 @@ We wanna to dispatch an action that will fetch a list of products and in the sam
 
 ```js
 const actions = {
-	
-	GET_PRODUCTS: (state, { url }, { dispatch }) => {
-		
-		fetch(url)
-			.then( response => response.json())
-			.then( products => dispatch('LOAD_PRODUCTS_FROM_API', { products }))
-		
-		return {
-			appLoading :true
-		}
-	},
+  
+  GET_PRODUCTS: (state, { url }, { dispatch }) => {
+    
+    fetch(url)
+      .then( response => response.json())
+      .then( products => dispatch('LOAD_PRODUCTS_FROM_API', { products }))
+    
+    return {
+      appLoading :true
+    }
+  },
 
-	LOAD_PRODUCTS_FROM_API: ( state, { products } ) => {
-		return {
-			products,
-			appLoading: false
-		}
-	}
+  LOAD_PRODUCTS_FROM_API: ( state, { products } ) => {
+    return {
+      products,
+      appLoading: false
+    }
+  }
 }
 
 ```
+As you can see, the third parameter gets the Oni instance, so you can call another `action` from there, we belive that's the best way to any other developer figure out just by looking at the action what is gonna be the next step.
 
 There are other ways to do the same thing we did in the code above, if you want to let your actions pure, you can make the service call from a component and delegate to the action only the state changes of your application:
 
 ```js
 const actions = {
-	
-	GET_PRODUCTS: (state, { productsPromise }, { dispatch }) => {
-		productsPromise.then( products => dispatch('LOAD_PRODUCTS_FROM_API', { products }))
-		return {
-			appLoading:true 
-		}
-	},
+  
+  GET_PRODUCTS: (state, { productsPromise }, { dispatch }) => {
+    productsPromise.then( products => dispatch('LOAD_PRODUCTS_FROM_API', { products }))
+    return {
+      appLoading:true 
+    }
+  },
 
-	LOAD_PRODUCTS_FROM_API: ( state, { products } ) => {
-		return {
-			products,
-			appLoading: false
-		}
-	}
+  LOAD_PRODUCTS_FROM_API: ( state, { products } ) => {
+    return {
+      products,
+      appLoading: false
+    }
+  }
 }
 
 ```
