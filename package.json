@@ -1,7 +1,7 @@
 {
 	"name": "onijs",
 	"version": "1.0.0",
-	"description": "Pandora is an agnostic and simple State Managment library for Javascript Applications",
+	"description": "Oni is an agnostic and simple State Managment micro-library for Javascript Applications",
 	"main": "index.js",
 	"scripts": {
 		"start": "webpack --watch --mode=development",
@@ -10,17 +10,17 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Javiani/Pandora"
+		"url": "https://github.com/Javiani/Oni"
 	},
 	"keywords": [
-		"Pandora",
+		"Oni",
 		"State Management",
 		"Javascript Architecture",
 		"Micro-Library"
 	],
 	"author": "javiani",
 	"license": "MIT",
-	"homepage": "https://github.com/Javiani/Pandora",
+	"homepage": "https://github.com/Javiani/Oni",
 	"devDependencies": {
 		"@babel/core": "^7.2.2",
 		"@babel/preset-env": "^7.2.3",
