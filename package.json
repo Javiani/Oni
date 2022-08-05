@@ -1,5 +1,5 @@
 {
-	"name": "pandora",
+	"name": "onijs",
 	"version": "1.0.0",
 	"description": "Pandora is an agnostic and simple State Managment library for Javascript Applications",
 	"main": "index.js",
