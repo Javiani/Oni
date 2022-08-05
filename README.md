@@ -27,7 +27,7 @@
 ## Differences between Redux Philosophy 👓
 
 ### Redux's strategy
-The main difference between Redux strategy and Oni is the fact that Redux works with composible functions called reducers. Each reducers responds to a one or several actions, so in order to track changes regarding where a certain change happen, you need to look to the property of the state and look for the reducer that has the responsibility to change it. By using Redux tools it shouldn't be a big problem, but there's a limitation... 
+The main difference between Redux strategy and Oni is the fact that Redux works with composible functions called reducers. Each reducers responds to a one or several actions, so in order to track changes regarding where a certain change happens, you need to look to the property of the state and look for the reducer that has the responsibility to change it. By using Redux tools it shouldn't be a big problem, but there's a limitation... 
 
 The reducer is restricted to only 1 property of your state. But there's a plenty situations where you want to change more then 1 property of your state given an action fired.
 
