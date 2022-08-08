@@ -23,6 +23,7 @@ export const useStore = (store) => {
 		payload: data.payload,
 		dispatch: store.dispatch,
 		unsubscribe: store.unsubscribe,
-		subscribe: store.subscribe
+		subscribe: store.subscribe,
+		patternMatch: store.patternMatch
 	}
 }

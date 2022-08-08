@@ -3,6 +3,10 @@ interface Params {
 	payload: object | null | undefined
 }
 
+interface MapFn {
+	[key: string]: Function
+}
+
 export default function Oni(initialState: Object, actions: Object) {
 
 	let topics: Array<Function> = []
@@ -28,7 +32,7 @@ export default function Oni(initialState: Object, actions: Object) {
 		return new Promise((resolve) => rAF(_ => update({ action, payload }, resolve)))
 	}
 
-	const patternMatch = (mapfn) => {
+	const patternMatch = (mapfn: MapFn) => {
 		subscribe((s, { action, payload }) => {
 			if (action in mapfn) {
 				mapfn[action].call(null, s, { action, payload })
@@ -42,7 +46,7 @@ export default function Oni(initialState: Object, actions: Object) {
 			if (!(action in actions)) {
 				console.log(`[Oni] Error -> No action [ ${action} ] found.`)
 			} else {
-				const data = actions[action].call(null, state, payload, { getState, subscribe, unsubscribe, dispatch })
+				const data = actions[action].call(null, state, payload, { getState, subscribe, unsubscribe, dispatch, patternMatch })
 				Object.assign(state, data)
 			}
 		})

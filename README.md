@@ -144,8 +144,8 @@ Every `dispatch` calls will force an update in the store that will notify all su
 
 ```js
 store.patternMatch({
-	COUNTER_ADD : (state) => doSomethingOnAddCount( state.counter ),
-	COUNTER_SUBTRACT: (state) => doAnotherThing( state.counter )
+  COUNTER_ADD : (state) => doSomethingOnAddCount( state.counter ),
+  COUNTER_SUBTRACT: (state) => doAnotherThing( state.counter )
 })
 ```
 
@@ -153,14 +153,14 @@ The code above is equivalent to:
 
 ```js 
 store.subscribe( (state, { action, payload }) =>{
-	switch( action ) {
-		case 'COUNTER_ADD': 
-			doSomethingOnAddCount(state.counter)
-		break
-		case 'COUNTER_SUBTRACT': 
-			doAnotherThing(state.counter) 
-		break
-	}
+  switch( action ) {
+    case 'COUNTER_ADD': 
+      doSomethingOnAddCount(state.counter)
+    break
+    case 'COUNTER_SUBTRACT': 
+      doAnotherThing(state.counter) 
+    break
+  }
 })
 
 ```
