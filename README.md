@@ -3,7 +3,7 @@
 <br />
 <img src="./hero.png" />
 
-<p align="center">Agnostic & Simple State Managing library for Javascript Applications</p>
+<p align="center">Agnostic & Simple State Managment library for Javascript Applications</p>
 <p align="center">
   <img src="https://img.shields.io/npm/l/onijs?style=flat-square" />
   <img src="https://img.shields.io/npm/v/onijs?style=flat-square" />
