@@ -15,7 +15,7 @@ export const useStore = (store) => {
 	useEffect(_ => {
 		store.subscribe(update)
 		return _ => store.unsubscribe(update)
-	})
+	}, [])
 
 	return {
 		state: data.state,
@@ -24,6 +24,7 @@ export const useStore = (store) => {
 		dispatch: store.dispatch,
 		unsubscribe: store.unsubscribe,
 		subscribe: store.subscribe,
-		patternMatch: store.patternMatch
+		patternMatch: store.patternMatch,
+		getState: store.getState
 	}
 }
