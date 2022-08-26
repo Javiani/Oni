@@ -1,30 +1,37 @@
+import Oni from 'onijs'
 import { useEffect, useState } from 'react'
 
-export const useStore = (store) => {
+export const createStore = ( initialState, actions ) => {
 
-	const [data, setData] = useState({
-		state: store.getState(),
-		action: '',
-		payload: null
-	})
-
-	const update = (s, { action, payload }) => {
-		setData({ state: s, action, payload })
-	}
-
-	useEffect(_ => {
-		store.subscribe(update)
-		return _ => store.unsubscribe(update)
-	}, [])
+	const store = Oni( initialState, actions )
 
 	return {
-		state: data.state,
-		action: data.action,
-		payload: data.payload,
-		dispatch: store.dispatch,
-		unsubscribe: store.unsubscribe,
-		subscribe: store.subscribe,
-		patternMatch: store.patternMatch,
-		getState: store.getState
+		store,
+		useStore() {
+			const [data, setData] = useState({
+				state: store.getState(),
+				action: '',
+				payload: null
+			})
+
+			const update = (s, { action, payload }) => {
+				setData({ state: s, action, payload })
+			}
+
+			useEffect(() => {
+				store.subscribe(update)
+				return () => {
+					store.unsubscribe(update)
+				}
+			}, [])
+
+			return {
+				state: data.state,
+				action: data.action,
+				payload: data.payload,
+				dispatch: store.dispatch,
+				getState: store.getState
+			}
+		}
 	}
 }

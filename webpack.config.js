@@ -39,7 +39,8 @@ module.exports = [{
 
 	externals: {
 		react: 'react',
-		React: 'react'
+		React: 'react',
+		onijs: 'onijs'
 	},
 
 	resolve: {

@@ -59,8 +59,7 @@ const initialState = {
   counter: 0
 }
 
-const actions = {
-
+export const store = Oni( initialState,  {
   /**  @Actions **/
   COUNTER_ADD: ( state, { increment = 1 }) => {
     return {
@@ -75,7 +74,6 @@ const actions = {
   }
 })
 
-export const store = Oni( initialState, actions )
 ```
 
 First parameter is the serializable object `initialState`, the second is a collection of `actions` that you can name using your own pattern and getting payload from a **dispatch** call.
@@ -113,14 +111,14 @@ You can use the React Hook adapter in order to use it on your React applications
 `shared/store/my-store.js`
 
 ```js
-import Oni, { useStore } from 'onijs'
+import { createStore } from 'onijs/react'
 
 const initialState = {
   user: { ... },
   counter: 0
 }
 
-const actions = {
+export default createStore( initialState, {
 
   /**  @Actions **/
   COUNTER_ADD: ( state, { increment = 1 }) => {
@@ -136,22 +134,16 @@ const actions = {
   }
 })
 
-const store = Oni( initialState, actions )
-
-export const useMyStore = () => {
-  return useStore( store )
-}
-
 ```
 
 `components/my-component.js`
 
 ```jsx
-import { useMyStore } from "shared/store/my-store.js";
+import { useStore } from "shared/store/my-store.js";
 
 export default function MyComponent() {
   // All available options : { state, action, payload, dispatch, unsubscribe, subscribe }
-  const { state, dispatch } = useMyStore();
+  const { state, dispatch } = useStore();
 
   const onButtonClick = (e) => {
     dispatch("COUNTER_ADD", { increment: 5 });
@@ -170,7 +162,40 @@ export default function MyComponent() {
 }
 ```
 
-## Pattern Matching ⟦⟧
+<br />
+<br />
+
+## Logging
+
+A important thing to keep in mind is how to log the changes in order to debug what's really happening on your app.
+There's a simple and straightforward way to check what action was called and the current state, there's no need to install any extension in the browser, we can use the console tool for this matter:
+<br />
+<br />
+
+<p align="center">
+  <img width="500" src="./screenshot.png" alt="Console Log screenshot" align="right" style="display:block" />
+</p>
+
+```js
+store.subscribe((state, { action, payload }) => {
+  storage.session.set(KEY, state);
+  console.groupCollapsed(`${KEY} -> ${action}`);
+  console.log({ payload, state });
+  console.groupEnd();
+});
+```
+
+<br clear="all" />
+<br />
+<br />
+
+No middlewares, no browsers extensions, no magic. Fell free to design your own way to display the information you need, **it's up to you, it's on your control**.
+
+<br />
+<br />
+<br />
+
+## Pattern Matching ⟦⟧ - Vanilla js
 
 Every `dispatch` calls will force an update in the store that will notify all subscribers. So in order to specify a specific action you wanna a component respond to, you can use a switch case to test the action in the callback function, or you can use the `.patternMatch` api instead of `subscribe`.
 
@@ -196,59 +221,6 @@ store.subscribe((state, { action, payload }) => {
 });
 ```
 
-## Composing Actions Architecture 💡
-
-We recomend you to always use 1 store for your application, but you can have several contexts and putting all the actions in the same store won't scale.
-
-So, one possible way to scale is to break down your actions in different contexts and **compose** them.
-Here I'm gonna set all my actions under `use-cases` in my application folder structure:
-
-```
-.
-├── home/
-│   ├── ...
-│   └── index.js
-├── checkout/
-│   ├── components
-│   ├── services
-│   ├── use-cases/
-│   │   ├── cart.js
-│   │   └── payment.js
-│   └── index.js
-└── shared/
-    └── store.js
-```
-
-In order to create a store with a set of actions for a specific page or a group of pages like a checkout, we can create a factory function that will compose our **actions** and **initialStates**.
-
-```js
-import Oni from "onijs";
-
-export default function createStore(extInitialState, extActions) {
-  const initialState = {
-    // If you wanna retrieve state from localStorage by default
-    ...JSON.parse(localStorage.getItem("my-store") || {}),
-    // Extending initialState with more properties depending on Page / Context you are
-    ...extInitialState,
-  };
-
-  const actions = {
-    ...extActions,
-  };
-
-  const store = Oni(initialState, actions);
-
-  // If you wanna save your store whenever it updates
-  store.subscribe((state) => {
-    localstorage.setItem("my-store", JSON.stringify(state));
-  });
-
-  return store;
-}
-```
-
-All hardcoded parts from the code above can be parameterized, this is just an example on how you can use 1 store across your entire app by creating it dynamically with actions and initial states.
-
 ## Async Changes
 
 We belive that Javascript has a great set of tools and strategies to deal with concurrency but it can be very chalenging for those who are starting in the Front-end carrer or for those that are starting in a new team, so we wanna keep it as most simple as we can. So we highly recommend to break down in more actions to give a nice and clean flux of your application.
@@ -266,14 +238,14 @@ const actions = {
       .then((products) => dispatch("LOAD_PRODUCTS_FROM_API", { products }));
 
     return {
-      appLoading: true,
+      loading: true,
     };
   },
 
   LOAD_PRODUCTS_FROM_API: (state, { products }) => {
     return {
       products,
-      appLoading: false,
+      loading: false,
     };
   },
 };
@@ -290,14 +262,14 @@ const actions = {
       dispatch("LOAD_PRODUCTS_FROM_API", { products })
     );
     return {
-      appLoading: true,
+      loading: true,
     };
   },
 
   LOAD_PRODUCTS_FROM_API: (state, { products }) => {
     return {
       products,
-      appLoading: false,
+      loading: false,
     };
   },
 };
@@ -305,9 +277,15 @@ const actions = {
 
 The use case above is telling us that some part of the application make a request, so the store updated the UI loading state, while it waits for the response, which when is resolved it will update UI with loading state set to `false` and the product list provided by the request.
 
+<br />
+<br />
+
 ## What about Async functions? 🧐
 
 You see that we used `.then` interface from Promises in the example above, you can use async functions in order to use `async` & `await` features, but be aware that by doing that, your action will return always a `Promise` so you won't be able to change application state right after the action be executed.
+
+<br />
+<br />
 
 ## The end
 
