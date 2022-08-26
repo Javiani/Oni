@@ -42,7 +42,7 @@ So, in order to know what has changed a specific property of you app state, you 
 
 ## Installing ⚡️
 
-`yarn add onijs` or `npm install onijs`
+`yarn add @javiani/onijs` or `npm install @javiani/onijs`
 <br />
 <br />
 <br />

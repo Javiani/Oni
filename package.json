@@ -1,5 +1,5 @@
 {
-	"name": "onijs",
+	"name": "@javiani/onijs",
 	"version": "0.0.1",
 	"description": "Oni is an agnostic and simple State Managment micro-library for Javascript Applications",
 	"main": "index.js",
