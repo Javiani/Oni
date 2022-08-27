@@ -58,11 +58,10 @@ module.exports = [{
 	},
 
 	output: {
-		path: path.resolve(__dirname, './'),
-		filename: '[name].js',
-		libraryTarget: 'commonjs2',
+		path: path.resolve(__dirname, './react'),
+		filename: 'index.js',
+		libraryTarget: 'umd',
 		umdNamedDefine: true,
-		globalObject: 'this',
-		publicPath: '/'
+		globalObject: 'this'
 	}
 }]

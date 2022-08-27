@@ -1,11 +1,10 @@
 {
 	"name": "@javiani/onijs",
-	"version": "0.0.1",
+	"version": "0.0.9",
 	"description": "Oni is an agnostic and simple State Managment micro-library for Javascript Applications",
-	"main": "index.js",
-	"files":[
+	"files": [
 		"index.js",
-		"react.js"
+		"react"
 	],
 	"scripts": {
 		"start": "webpack --watch --mode=development",

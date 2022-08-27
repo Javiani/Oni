@@ -1,5 +1,5 @@
 interface Params {
-	action: string,
+	action: string
 	payload: object | null | undefined
 }
 
@@ -9,27 +9,26 @@ interface MapFn {
 
 export default function Oni(initialState: Object, actions: Object) {
 
-	let topics: Array<Function> = []
 	let updates: Array<any> = []
 	let state: Object = dup(initialState)
+	const topics: Set<Function> = new Set()
 
 	const getState = (): Object => {
 		return state
 	}
 
-	const subscribe = (fn: Function): void => {
+	const subscribe = (fn: Function): Function => {
 		if (fn.call) {
-			topics.push(fn)
+			topics.add(fn)
+			return () => {
+				topics.delete(fn)
+			}
 		}
 	}
 
-	const unsubscribe = (fn: Function): void => {
-		topics = topics.filter(item => item != fn)
-	}
-
-	const dispatch = (action: string, payload) => {
+	const dispatch = (action: string, payload: object = {}) => {
 		updates.push({ action, payload })
-		return new Promise((resolve) => rAF(_ => update({ action, payload }, resolve)))
+		return new Promise((resolve) => rAF((_) => update({ action, payload }, resolve)))
 	}
 
 	const patternMatch = (mapfn: MapFn) => {
@@ -41,30 +40,31 @@ export default function Oni(initialState: Object, actions: Object) {
 	}
 
 	const update = ({ action, payload = {} }: Params, resolve): void => {
-
 		updates.forEach(({ action, payload = {} }: Params) => {
 			if (!(action in actions)) {
 				console.log(`[Oni] Error -> No action [ ${action} ] found.`)
 			} else {
-				const data = actions[action].call(null, state, payload, { getState, subscribe, unsubscribe, dispatch, patternMatch })
+				const data = actions[action].call(null, state, payload, { getState, subscribe, dispatch, patternMatch })
 				Object.assign(state, data)
 			}
 		})
 
 		if (updates.length) {
-			topics.forEach(topic => { topic(state, { action, payload }) })
+			topics.forEach((topic) => topic(state, { action, payload }))
 			updates = []
 		}
 
 		resolve(state)
 	}
 
+	const destroy = () => topics.clear()
+
 	return {
 		getState,
 		subscribe,
-		unsubscribe,
 		dispatch,
-		patternMatch
+		patternMatch,
+		destroy
 	}
 }
 
