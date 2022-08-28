@@ -91,14 +91,19 @@ First parameter is the serializable object `initialState`, the second is a colle
 import store from './src/stores/my-store.js'
 
 // Subscribe a function that will be called after every dispatch call
-store.subscribe( ( (state, { action, payload }) => console.log( state, action, payload )
+const unsubscribe = store.subscribe( ( (state, { action, payload }) => {
+  console.log( state, action, payload )
+}
+
+// Unsubscribe
+unsubscribe( Function ) // Removes that subscriber function from update function list.
 
 // Firing an action
 store.dispatch('COUNTER_ADD', { increment: 2 }) // Second parameter can be any serializable object.
 
 // Getting the current store state
 store.getState()
-store.unsubscribe( Function ) // Removes that subscriber function from update function list.
+
 ```
 
 <br />
@@ -117,22 +122,18 @@ const initialState = {
   user: { ... },
   counter: 0
 }
+// Exporting store vanilla for subscribing effects and the useStore hook
+export const { store, useStore } = createStore(initialState, {
+	/** @Actions **/
+	COUNTER_ADD: (state, { payload }) => ({
+		counter: state.counter + 1
+	}),
 
-export default createStore( initialState, {
-
-  /**  @Actions **/
-  COUNTER_ADD: ( state, { increment = 1 }) => {
-    return {
-      counter : state.counter + increment
-    }
-  },
-
-  COUNTER_SUBTRACT: ( state, { decrement = 1 }) => {
-    return {
-      counter: state.counter - decrement
-    }
-  }
+	COUNTER_SUBTRACT: (state, { payload }) => ({
+		counter: state.counter - 1
+	})
 })
+
 
 ```
 
@@ -142,7 +143,7 @@ export default createStore( initialState, {
 import { useStore } from "shared/store/my-store.js";
 
 export default function MyComponent() {
-  // All available options : { state, action, payload, dispatch, unsubscribe, subscribe }
+  // All available options : { state, action, payload, dispatch }
   const { state, dispatch } = useStore();
 
   const onButtonClick = (e) => {
@@ -162,7 +163,6 @@ export default function MyComponent() {
 }
 ```
 
-<br />
 <br />
 
 ## Logging
@@ -193,7 +193,6 @@ No middlewares, no browsers extensions, no magic. Fell free to design your own w
 
 <br />
 <br />
-<br />
 
 ## Pattern Matching ⟦⟧ - Vanilla js
 
@@ -220,6 +219,8 @@ store.subscribe((state, { action, payload }) => {
   }
 });
 ```
+
+<br />
 
 ## Async Changes
 
