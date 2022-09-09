@@ -165,6 +165,27 @@ export default function MyComponent() {
 
 <br />
 
+### Restricting Updates
+
+Every React component that use the custom hook `useStore` will automatically update on every state changes. Since state is not a primitive value, it's not a good idea to use `useEffect` in order to respond when some prop has changed, instead, you can specify what kind of actions your component will be listening to:
+
+```jsx
+export default function CounterDisplay() {
+  // All available options : { state, action, payload, dispatch }
+  const { state } = useStore(["COUNTER_ADD", "COUNTER_SUBTRACT"]);
+
+  return (
+    <div className="counter-display">
+      <h1>Counter Display</h1>
+      <p>{state.counter}</p>
+    </div>
+  );
+}
+```
+
+The component above will only rerender if some other component has dispatched : `COUNTER_ADD` and `COUNTER_SUBTRACT`.
+So here, we are thinking different from the prop change approach, we are saying that this component should react to a certain kind of actions on your application.
+
 ## Logging
 
 A important thing to keep in mind is how to log the changes in order to debug what's really happening on your app.

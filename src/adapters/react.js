@@ -7,7 +7,7 @@ export const createStore = (initialState = {}, actions) => {
 
 	return {
 		store,
-		useStore() {
+		useStore( actions ) {
 			const [s, set] = useState({
 				state: initialState,
 				payload: null,
@@ -16,7 +16,11 @@ export const createStore = (initialState = {}, actions) => {
 
 			useEffect(() => {
 				const unsubscribe = store.subscribe((state, { action, payload }) => {
-					set({ state, payload, action })
+					if( actions && actions.includes(action) ) {
+						set({ state, payload, action })
+					}else if( !actions ) {
+						set({ state, payload, action })
+					}
 				})
 				return () => {
 					unsubscribe()
