@@ -194,7 +194,7 @@ There's a simple and straightforward way to check what action was called and the
 <br />
 
 <p align="center">
-  <img width="500" src="./screenshot.png" alt="Console Log screenshot" align="right" style="display:block" />
+  <img width="50%" src="./screenshot.png" alt="Console Log screenshot" align="right" style="display:block" />
 </p>
 
 ```js
