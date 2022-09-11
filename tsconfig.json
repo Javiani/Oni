@@ -1,6 +1,9 @@
 {
 	"compilerOptions": {
 		"lib": [ "dom" ],
-		"sourceMap": true
+		"sourceMap": true,
+		"emitDeclarationOnly": true,
+		"declaration": true
+		// "outFile": "types.d.ts"
 	}
 }

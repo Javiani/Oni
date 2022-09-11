@@ -1,23 +1,38 @@
-interface Params {
-	action: string
-	payload: object | null | undefined
+
+export type Subscription = ( state: State, params: SubscriptionParams ) => unknown
+export type Action = ( state: State, payload: object ) => State
+export interface State {
+	[key:string] :any
 }
 
-interface MapFn {
-	[key: string]: Function
+export interface Actions {
+	[key:string] : Action
 }
 
-export default function Oni(initialState: Object, actions: Object) {
+export interface SubscriptionParams {
+	action	: string
+	payload	: object
+}
 
-	let updates: Array<any> = []
-	let state: Object = dup(initialState)
+export interface Store {
+	getState() : State
+	subscribe( fn: Subscription ) : Function
+	dispatch( action: keyof Actions, payload?: object ) : Promise<unknown>
+	patternMatch( mapfn: Action )
+	destroy(): void
+}
+
+export default function Oni(initialState: State, actions: Actions ) {
+
+	let updates : Array<object> = []
 	const topics: Set<Function> = new Set()
+	const state = dup(initialState)
 
-	const getState = (): Object => {
+	const getState = () => {
 		return state
 	}
 
-	const subscribe = (fn: Function): Function => {
+	const subscribe = (fn) => {
 		if (fn.call) {
 			topics.add(fn)
 			return () => {
@@ -26,12 +41,12 @@ export default function Oni(initialState: Object, actions: Object) {
 		}
 	}
 
-	const dispatch = (action: string, payload: object = {}) => {
+	const dispatch = (action, payload) => {
 		updates.push({ action, payload })
-		return new Promise((resolve) => rAF((_) => update({ action, payload }, resolve)))
+		return new Promise((resolve) => rAF((_) => update({ action, payload } as SubscriptionParams, resolve)))
 	}
 
-	const patternMatch = (mapfn: MapFn) => {
+	const patternMatch = (mapfn) => {
 		subscribe((s, { action, payload }) => {
 			if (action in mapfn) {
 				mapfn[action].call(null, s, { action, payload })
@@ -39,8 +54,8 @@ export default function Oni(initialState: Object, actions: Object) {
 		})
 	}
 
-	const update = ({ action, payload = {} }: Params, resolve): void => {
-		updates.forEach(({ action, payload = {} }: Params) => {
+	const update = ({ action, payload = {} }, resolve)  => {
+		updates.forEach(({ action, payload = {} }: SubscriptionParams) => {
 			if (!(action in actions)) {
 				console.log(`[Oni] Error -> No action [ ${action} ] found.`)
 			} else {
@@ -65,10 +80,10 @@ export default function Oni(initialState: Object, actions: Object) {
 		dispatch,
 		patternMatch,
 		destroy
-	}
+	} as Store
 }
 
-const dup = (object: Object): object => {
+const dup = (object: State): State => {
 	return JSON.parse(JSON.stringify(object))
 }
 

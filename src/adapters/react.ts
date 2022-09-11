@@ -1,13 +1,20 @@
-import Oni from '../../'
+import Oni, { Store, State, Actions } from '../../'
 import { useEffect, useState } from 'react'
 
-export const createStore = (initialState = {}, actions) => {
+interface useStoreInterface {
+	state	: State,
+	payload	: object,
+	action	: keyof Actions,
+	dispatch( action: keyof Actions, payload?: object ) : Promise<unknown>
+}
 
-	const store = Oni(initialState, actions)
+export const createStore = ( initialState: State, actions: Actions ) => {
+
+	const store: Store = Oni( initialState, actions )
 
 	return {
 		store,
-		useStore( actions ) {
+		useStore( actions?: Array<keyof Actions> ) {
 			const [s, set] = useState({
 				state: initialState,
 				payload: null,
@@ -32,7 +39,8 @@ export const createStore = (initialState = {}, actions) => {
 				payload: s.payload,
 				action: s.action,
 				dispatch: store.dispatch
-			}
+			} as useStoreInterface
 		}
 	}
 }
+

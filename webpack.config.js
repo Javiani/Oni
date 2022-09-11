@@ -34,7 +34,7 @@ module.exports = [{
 }, {
 
 	entry: {
-		'react': './src/adapters/react.js'
+		'react': './src/adapters/react.ts'
 	},
 
 	externals: {
@@ -50,9 +50,12 @@ module.exports = [{
 	module: {
 		rules: [
 			{
-				test: /\.(ts|js)x?$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/,
+				test: /\.ts$/,
+				exclude: [/node_modules/],
+				loader: 'ts-loader',
+				options: {
+					transpileOnly: true
+				}
 			}
 		]
 	},
