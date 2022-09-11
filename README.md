@@ -294,6 +294,7 @@ const actions = {
     };
   },
 };
+
 ```
 
 The use case above is telling us that some part of the application make a request, so the store updated the UI loading state, while it waits for the response, which when is resolved it will update UI with loading state set to `false` and the product list provided by the request.
