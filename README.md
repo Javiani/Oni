@@ -96,7 +96,7 @@ const unsubscribe = store.subscribe( ( (state, { action, payload }) => {
 }
 
 // Unsubscribe
-unsubscribe( Function ) // Removes that subscriber function from update function list.
+unsubscribe() // Removes that subscriber function from update function list.
 
 // Firing an action
 store.dispatch('COUNTER_ADD', { increment: 2 }) // Second parameter can be any serializable object.
