@@ -16,9 +16,9 @@ export const createStore = ( initialState: State, actions: Actions ) => {
 		store,
 		useStore( restrictedActions?: Array<keyof Actions> ) {
 			const [s, set] = useState({
-				state: initialState,
+				state  : store.getState(),
 				payload: null,
-				action: null
+				action : null
 			})
 
 			useEffect(() => {
