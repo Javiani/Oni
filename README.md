@@ -52,7 +52,7 @@ So, in order to know what has changed a specific property of you app state, you 
 `./src/stores/my-store.js`
 
 ```js
-import Oni from 'onijs'
+import Oni from '@javiani/onijs'
 
 const initialState = {
   user: { ... },
@@ -116,7 +116,7 @@ You can use the React Hook adapter in order to use it on your React applications
 `shared/store/my-store.js`
 
 ```js
-import { createStore } from 'onijs/react'
+import { createStore } from '@javiani/onijs/react'
 
 const initialState = {
   user: { ... },
@@ -124,14 +124,14 @@ const initialState = {
 }
 // Exporting store vanilla for subscribing effects and the useStore hook
 export const { store, useStore } = createStore(initialState, {
-	/** @Actions **/
-	COUNTER_ADD: (state, { payload }) => ({
-		counter: state.counter + 1
-	}),
+  /** @Actions **/
+  COUNTER_ADD: (state, { payload }) => ({
+    counter: state.counter + 1
+  }),
 
-	COUNTER_SUBTRACT: (state, { payload }) => ({
-		counter: state.counter - 1
-	})
+  COUNTER_SUBTRACT: (state, { payload }) => ({
+    counter: state.counter - 1
+  })
 })
 
 
