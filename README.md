@@ -199,8 +199,7 @@ There's a simple and straightforward way to check what action was called and the
 
 ```js
 store.subscribe((state, { action, payload }) => {
-  storage.session.set(KEY, state);
-  console.groupCollapsed(`${KEY} -> ${action}`);
+  console.groupCollapsed(`My Store -> ${action}`);
   console.log({ payload, state });
   console.groupEnd();
 });
