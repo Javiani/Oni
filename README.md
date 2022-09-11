@@ -5,8 +5,8 @@
 
 <p align="center">Agnostic & Simple State Managment library for Javascript Applications</p>
 <p align="center">
-  <img src="https://img.shields.io/npm/l/onijs?style=flat-square" />
-  <img src="https://img.shields.io/npm/v/onijs?style=flat-square" />
+  <img src="https://img.shields.io/npm/l/@javiani/onijs?style=flat-square" />
+  <img src="https://img.shields.io/npm/v/@javiani/onijs?style=flat-square" />
 </p>
 
 <br />
