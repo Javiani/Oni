@@ -14,7 +14,7 @@ export const createStore = ( initialState: State, actions: Actions ) => {
 
 	return {
 		store,
-		useStore( actions?: Array<keyof Actions> ) {
+		useStore( restrictedActions?: Array<keyof Actions> ) {
 			const [s, set] = useState({
 				state: initialState,
 				payload: null,
@@ -23,9 +23,9 @@ export const createStore = ( initialState: State, actions: Actions ) => {
 
 			useEffect(() => {
 				const unsubscribe = store.subscribe((state, { action, payload }) => {
-					if( actions && actions.includes(action) ) {
+					if( restrictedActions && restrictedActions.includes(action) ) {
 						set({ state, payload, action })
-					}else if( !actions ) {
+					}else if( !restrictedActions ) {
 						set({ state, payload, action })
 					}
 				})
