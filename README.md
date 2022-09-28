@@ -25,7 +25,7 @@
 <br />
 
 <p align="center">
-  <a href="https://react-mvc-architecture-spowy3.stackblitz.io" target="_blank"><img align="center" width="901" alt="stackblitz-oni-example" src="https://user-images.githubusercontent.com/567506/192678848-51d37aaf-239f-428e-8edc-0420e9a1d96a.png"></a></p>
+  <a href="https://stackblitz.com/edit/react-onijs?file=App.tsx" target="_blank"><img align="center" width="901" alt="stackblitz-oni-example" src="https://user-images.githubusercontent.com/567506/192678848-51d37aaf-239f-428e-8edc-0420e9a1d96a.png"></a></p>
 
 <br />
 <br />
