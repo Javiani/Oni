@@ -17,7 +17,7 @@
 
 1. **Simplicity** - Helping us to create an easy and straightfowared state managment library without bloated boilerplates.
 2. **Flexibility** - Giving us access to any level of properties of our state tree.
-3. **Agnostic**, - Compatible with any frameworks and vanilla javascript, aiming ubiquity.
+3. **Agnostic** - Compatible with any frameworks and vanilla javascript, aiming ubiquity.
 4. **Testing ready** - Easy to test and isomorphic by Design. Actions are pure functions and state a JSON object, you can test it with any testing libraries without any dependencies.
 5. **React** : **No Providers wrappers are needed for your application**, just use hooks to connect component with your store.
    <br />
