@@ -87,6 +87,6 @@ const dup = (object: State): State => {
 	return JSON.parse(JSON.stringify(object))
 }
 
-const rAF = (fn: FrameRequestCallback): number => {
-	return requestAnimationFrame ? requestAnimationFrame(fn) : 0
-}
+const rAF = typeof window === 'undefined'
+	? (fn) => fn()
+	: (fn) => requestAnimationFrame(fn)
