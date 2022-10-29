@@ -17,11 +17,18 @@
 
 1. **Simplicity** - Helping us to create an easy and straightfowared state managment library without bloated boilerplates.
 2. **Flexibility** - Giving us access to any level of properties of our state tree.
-3. **Agnostic**, - Compatible with any frameworks and vanilla javascript, aiming ubiquity.
+3. **Agnostic** - Compatible with any frameworks and vanilla javascript, aiming ubiquity.
 4. **Testing ready** - Easy to test and isomorphic by Design. Actions are pure functions and state a JSON object, you can test it with any testing libraries without any dependencies.
 5. **React** : **No Providers wrappers are needed for your application**, just use hooks to connect component with your store.
-   <br />
-   <br />
+
+<br />
+<br />
+
+<p align="center">
+  <a href="https://stackblitz.com/edit/react-onijs?file=App.tsx" target="_blank"><img align="center" width="901" alt="stackblitz-oni-example" src="https://user-images.githubusercontent.com/567506/192678848-51d37aaf-239f-428e-8edc-0420e9a1d96a.png"></a></p>
+
+<br />
+<br />
 
 ## Differences between Redux Philosophy 👓
 
@@ -96,7 +103,7 @@ const unsubscribe = store.subscribe( ( (state, { action, payload }) => {
 }
 
 // Unsubscribe
-unsubscribe( Function ) // Removes that subscriber function from update function list.
+unsubscribe() // Removes that subscriber function from update function list.
 
 // Firing an action
 store.dispatch('COUNTER_ADD', { increment: 2 }) // Second parameter can be any serializable object.
@@ -194,7 +201,7 @@ There's a simple and straightforward way to check what action was called and the
 <br />
 
 <p align="center">
-  <img width="500" src="./screenshot.png" alt="Console Log screenshot" align="right" style="display:block" />
+  <img width="50%" src="./screenshot.png" alt="Console Log screenshot" align="right" style="display:block" />
 </p>
 
 ```js
