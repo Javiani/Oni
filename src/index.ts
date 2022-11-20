@@ -18,7 +18,7 @@ export interface Store {
 	getState() : State
 	subscribe( fn: Subscription ) : Function
 	dispatch( action: keyof Actions, payload?: object ) : Promise<unknown>
-	patternMatch( mapfn: VoidFunction )
+	patternMatch( mapfn: any )
 	destroy(): void
 }
 

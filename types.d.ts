@@ -14,7 +14,7 @@ export interface Store {
     getState(): State;
     subscribe(fn: Subscription): Function;
     dispatch(action: keyof Actions, payload?: object): Promise<unknown>;
-    patternMatch(mapfn: VoidFunction): any;
+    patternMatch(mapfn: any): any;
     destroy(): void;
 }
 export default function Oni(initialState: State, actions: Actions): Store;
