@@ -47,10 +47,15 @@ export default function Oni(initialState: State, actions: Actions ) {
 	}
 
 	const patternMatch = (mapfn) => {
-		subscribe((s, { action, payload }) => {
-			if (action in mapfn) {
-				mapfn[action].call(null, s, { action, payload })
-			}
+		return new Promise((resolve) => {
+			subscribe((s, { action, payload }) => {
+				if ( action in mapfn ) {
+					rAF((_) => {
+						mapfn[action].call(null, s, { action, payload })
+						resolve(s)
+					})
+				}
+			})
 		})
 	}
 
