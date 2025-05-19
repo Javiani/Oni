@@ -1,9 +1,18 @@
 {
-	"compilerOptions": {
-		"lib": [ "dom" ],
-		"sourceMap": true,
-		"emitDeclarationOnly": true,
-		"declaration": true
-		// "outFile": "types.d.ts"
-	}
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+		"declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+		"rootDir": "src"
+  },
+  "include": ["src"]
 }

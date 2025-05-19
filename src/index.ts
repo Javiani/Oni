@@ -32,11 +32,16 @@ export default function Oni(initialState: State, actions: Actions ) {
 		return state
 	}
 
-	const subscribe = (fn) => {
-		if (fn.call) {
-			topics.add(fn)
+	const subscribe = (fnorObject) => {
+		if ( fnorObject.call ) {
+			topics.add(fnorObject)
 			return () => {
-				topics.delete(fn)
+				topics.delete(fnorObject)
+			}
+		} else {
+			return () => {
+				patternMatch(fnorObject)
+					.then(({ __unsubscribe}) => __unsubscribe())
 			}
 		}
 	}
@@ -48,11 +53,12 @@ export default function Oni(initialState: State, actions: Actions ) {
 
 	const patternMatch = (mapfn) => {
 		return new Promise((resolve) => {
-			subscribe((s, { action, payload }) => {
+			let unsubscribe = subscribe((s, { action, payload }) => {
 				if ( action in mapfn ) {
 					rAF((_) => {
 						mapfn[action].call(null, s, { action, payload })
-						resolve(s)
+						s.__unsubscribe = unsubscribe
+						resolve(s,)
 					})
 				}
 			})
