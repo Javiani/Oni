@@ -1,5 +1,5 @@
 export type Subscription = (state: State, params: SubscriptionParams) => unknown;
-export type Action = (state: State, payload: object) => State;
+export type Action = (state: object, payload: object) => State;
 export interface State {
     [key: string]: any;
 }
