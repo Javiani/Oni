@@ -40,9 +40,13 @@ export default function Oni(initialState: State, actions: Actions ) {
 				topics.delete(fnorObject)
 			}
 		} else {
+			const callback = (s, { action, payload }) => {
+				if ( action in fnorObject ) {
+					fnorObject[action].call(null, s, { action, payload })
+				}
+			}
 			return () => {
-				patternMatch(fnorObject)
-					.then(({ __unsubscribe}) => __unsubscribe())
+				topics.delete(callback)
 			}
 		}
 	}
@@ -54,12 +58,11 @@ export default function Oni(initialState: State, actions: Actions ) {
 
 	const patternMatch = (mapfn) => {
 		return new Promise((resolve) => {
-			let unsubscribe = subscribe((s, { action, payload }) => {
+			subscribe((s, { action, payload }) => {
 				if ( action in mapfn ) {
 					rAF((_) => {
 						mapfn[action].call(null, s, { action, payload })
-						s.__unsubscribe = unsubscribe
-						resolve(s,)
+						resolve(s)
 					})
 				}
 			})
