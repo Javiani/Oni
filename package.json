@@ -1,6 +1,6 @@
 {
 	"name": "@javiani/onijs",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Oni is an agnostic and simple State Managment micro-library for Javascript Applications",
 	"author": "javiani",
 	"license": "MIT",
@@ -42,10 +42,10 @@
 		"typescript": "^5.8.3"
 	},
 	"peerDependencies": {
-		"react": "^19.1.0"
+		"react": "^18.0.0"
 	},
 	"dependencies": {
-		"react": "^19.1.0",
+		"react": "^18.0.0",
 		"vite": "^6.3.5"
 	}
 }
