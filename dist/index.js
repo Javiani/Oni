@@ -1,34 +1,43 @@
-function _(s, p) {
-  let l = [];
-  const c = /* @__PURE__ */ new Set(), r = b(s), f = () => r, i = (e) => e.call ? (c.add(e), () => {
-    c.delete(e);
-  }) : () => {
-    a(e).then(({ __unsubscribe: n }) => n());
-  }, h = (e, n) => (l.push({ action: e, payload: n }), new Promise((u) => g((t) => w({ action: e, payload: n }, u)))), a = (e) => new Promise((n) => {
-    let u = i((t, { action: o, payload: d }) => {
-      o in e && g((S) => {
-        e[o].call(null, t, { action: o, payload: d }), t.__unsubscribe = u, n(t);
+function m(r, i) {
+  let a = [];
+  const l = /* @__PURE__ */ new Set(), o = y(r), d = () => o, c = (t) => {
+    if (t.call)
+      return l.add(t), () => {
+        l.delete(t);
+      };
+    {
+      const n = (s, { action: e, payload: u }) => {
+        e in t && t[e].call(null, s, { action: e, payload: u });
+      };
+      return () => {
+        l.delete(n);
+      };
+    }
+  }, p = (t, n) => (a.push({ action: t, payload: n }), new Promise((s) => g((e) => w({ action: t, payload: n }, s)))), f = (t) => new Promise((n) => {
+    c((s, { action: e, payload: u }) => {
+      e in t && g((h) => {
+        t[e].call(null, s, { action: e, payload: u }), n(s);
       });
     });
-  }), w = ({ action: e, payload: n = {} }, u) => {
-    l.forEach(({ action: t, payload: o = {} }) => {
-      if (!(t in p))
-        console.log(`[Oni] Error -> No action [ ${t} ] found.`);
+  }), w = ({ action: t, payload: n = {} }, s) => {
+    a.forEach(({ action: e, payload: u = {} }) => {
+      if (!(e in i))
+        console.log(`[Oni] Error -> No action [ ${e} ] found.`);
       else {
-        const d = p[t].call(null, r, o, { getState: f, subscribe: i, dispatch: h, patternMatch: a });
-        Object.assign(r, d);
+        const h = i[e].call(null, o, u, { getState: d, subscribe: c, dispatch: p, patternMatch: f });
+        Object.assign(o, h);
       }
-    }), l.length && (c.forEach((t) => t(r, { action: e, payload: n })), l = []), u(r);
+    }), a.length && (l.forEach((e) => e(o, { action: t, payload: n })), a = []), s(o);
   };
   return {
-    getState: f,
-    subscribe: i,
-    dispatch: h,
-    patternMatch: a,
-    destroy: () => c.clear()
+    getState: d,
+    subscribe: c,
+    dispatch: p,
+    patternMatch: f,
+    destroy: () => l.clear()
   };
 }
-const b = (s) => JSON.parse(JSON.stringify(s)), g = typeof window > "u" ? (s) => s() : (s) => requestAnimationFrame(s);
+const y = (r) => JSON.parse(JSON.stringify(r)), g = typeof window > "u" ? (r) => r() : (r) => requestAnimationFrame(r);
 export {
-  _ as default
+  m as default
 };
