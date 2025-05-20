@@ -1,6 +1,6 @@
 {
 	"name": "@javiani/onijs",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Oni is an agnostic and simple State Managment micro-library for Javascript Applications",
 	"author": "javiani",
 	"license": "MIT",
