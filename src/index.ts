@@ -18,12 +18,12 @@ export interface Store {
 	getState(): State
 	subscribe(fn: Subscription): Function
 	dispatch(action: keyof Actions, payload?: object): Promise<unknown>
-	patternMatch(mapfn: any)
 	destroy(): void
 }
 
 export default function Oni(initialState: State, actions: Actions) {
-	let updates: Array<object> = []
+	let updates: SubscriptionParams[] = []
+	let isFlushing = false
 	const topics: Set<Function> = new Set()
 	const state = dup(initialState)
 
@@ -50,46 +50,43 @@ export default function Oni(initialState: State, actions: Actions) {
 		}
 	}
 
-	const dispatch = (action, payload) => {
+	const dispatch = (action, payload = {}) => {
 		updates.push({ action, payload })
-		return new Promise((resolve) =>
-			update({ action, payload } as SubscriptionParams, resolve)
-		)
-	}
 
-	const patternMatch = (mapfn) => {
 		return new Promise((resolve) => {
-			subscribe((s, { action, payload }) => {
-				if (action in mapfn) {
-					rAF((_) => {
-						mapfn[action].call(null, s, { action, payload })
-						resolve(s)
-					})
-				}
-			})
+			if (!isFlushing) {
+				flushQueue(resolve)
+			}
 		})
 	}
 
-	const update = ({ action, payload = {} }, resolve) => {
-		updates.forEach(({ action, payload = {} }: SubscriptionParams) => {
-			if (!(action in actions)) {
-				console.log(`[Oni] Error -> No action [ ${action} ] found.`)
-			} else {
+	const flushQueue = (resolve) => {
+		isFlushing = true
+
+		while (updates.length) {
+			const queue = updates.slice()
+			updates = []
+
+			for (const { action, payload } of queue) {
+				if (!(action in actions)) {
+					console.log(`[Oni] Error -> No action [ ${action} ] found.`)
+					continue
+				}
+
 				const data = actions[action].call(null, state, payload, {
 					getState,
 					subscribe,
-					dispatch,
-					patternMatch,
+					dispatch
 				})
-				Object.assign(state, data)
-			}
-		})
 
-		if (updates.length) {
-			topics.forEach((topic) => topic(state, { action, payload }))
-			updates = []
+				Object.assign(state, data)
+
+				// notify subscribers PER ACTION
+				topics.forEach((topic) => topic(state, { action, payload }) )
+			}
 		}
 
+		isFlushing = false
 		resolve(state)
 	}
 
@@ -99,7 +96,6 @@ export default function Oni(initialState: State, actions: Actions) {
 		getState,
 		subscribe,
 		dispatch,
-		patternMatch,
 		destroy,
 	} as Store
 }

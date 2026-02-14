@@ -1,74 +1,73 @@
-import { useState as g, useEffect as m } from "react";
-function w(n, f) {
-  let r = [];
-  const s = /* @__PURE__ */ new Set(), l = y(n), c = () => l, i = (e) => {
-    if (e.call)
-      return s.add(e), () => {
-        s.delete(e);
+import { useState as g, useEffect as y } from "react";
+function b(c, d) {
+  let t = [], o = !1;
+  const e = /* @__PURE__ */ new Set(), n = m(c), f = () => n, i = (s) => {
+    if (s.call)
+      return e.add(s), () => {
+        e.delete(s);
       };
     {
-      const u = (o, { action: t, payload: p }) => {
-        t in e && e[t].call(null, o, { action: t, payload: p });
+      const a = (l, { action: r, payload: h }) => {
+        r in s && s[r].call(null, l, { action: r, payload: h });
       };
-      return s.add(u), () => {
-        s.delete(u);
+      return e.add(a), () => {
+        e.delete(a);
       };
     }
-  }, d = (e, u) => (r.push({ action: e, payload: u }), new Promise((o) => h({ action: e, payload: u }, o))), a = (e) => new Promise((u) => {
-    i((o, { action: t, payload: p }) => {
-      t in e && b((S) => {
-        e[t].call(null, o, { action: t, payload: p }), u(o);
-      });
-    });
-  }), h = ({ action: e, payload: u = {} }, o) => {
-    r.forEach(({ action: t, payload: p = {} }) => {
-      if (!(t in f))
-        console.log(`[Oni] Error -> No action [ ${t} ] found.`);
-      else {
-        const S = f[t].call(null, l, p, {
-          getState: c,
+  }, u = (s, a = {}) => (t.push({ action: s, payload: a }), new Promise((l) => {
+    o || p(l);
+  })), p = (s) => {
+    for (o = !0; t.length; ) {
+      const a = t.slice();
+      t = [];
+      for (const { action: l, payload: r } of a) {
+        if (!(l in d)) {
+          console.log(`[Oni] Error -> No action [ ${l} ] found.`);
+          continue;
+        }
+        const h = d[l].call(null, n, r, {
+          getState: f,
           subscribe: i,
-          dispatch: d,
-          patternMatch: a
+          dispatch: u
         });
-        Object.assign(l, S);
+        Object.assign(n, h), e.forEach((S) => S(n, { action: l, payload: r }));
       }
-    }), r.length && (s.forEach((t) => t(l, { action: e, payload: u })), r = []), o(l);
+    }
+    o = !1, s(n);
   };
   return {
-    getState: c,
+    getState: f,
     subscribe: i,
-    dispatch: d,
-    patternMatch: a,
-    destroy: () => s.clear()
+    dispatch: u,
+    destroy: () => e.clear()
   };
 }
-const y = (n) => JSON.parse(JSON.stringify(n)), b = typeof window > "u" ? (n) => n() : (n) => requestAnimationFrame(n), F = (n, f) => {
-  const r = w(n, f);
+const m = (c) => JSON.parse(JSON.stringify(c)), N = (c, d) => {
+  const t = b(c, d);
   return {
-    store: r,
-    useStore(s) {
-      const [l, c] = g({
-        state: r.getState(),
+    store: t,
+    useStore(o) {
+      const [e, n] = g({
+        state: t.getState(),
         payload: null,
         action: null
       });
-      return m(() => {
-        const i = r.subscribe((d, { action: a, payload: h }) => {
-          s && s.includes(a) ? c({ state: d, payload: h, action: a }) : s || c({ state: d, payload: h, action: a });
+      return y(() => {
+        const f = t.subscribe((i, { action: u, payload: p }) => {
+          o && o.includes(u) ? n({ state: i, payload: p, action: u }) : o || n({ state: i, payload: p, action: u });
         });
         return () => {
-          i();
+          f();
         };
       }, []), {
-        state: l.state,
-        payload: l.payload,
-        action: l.action,
-        dispatch: r.dispatch
+        state: e.state,
+        payload: e.payload,
+        action: e.action,
+        dispatch: t.dispatch
       };
     }
   };
 };
 export {
-  F as createStore
+  N as createStore
 };

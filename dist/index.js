@@ -1,50 +1,47 @@
-function m(r, d) {
-  let a = [];
-  const l = /* @__PURE__ */ new Set(), o = w(r), i = () => o, c = (e) => {
+function w(a, i) {
+  let u = [], c = !1;
+  const s = /* @__PURE__ */ new Set(), o = y(a), d = () => o, f = (e) => {
     if (e.call)
-      return l.add(e), () => {
-        l.delete(e);
+      return s.add(e), () => {
+        s.delete(e);
       };
     {
-      const n = (s, { action: t, payload: u }) => {
-        t in e && e[t].call(null, s, { action: t, payload: u });
+      const n = (t, { action: l, payload: r }) => {
+        l in e && e[l].call(null, t, { action: l, payload: r });
       };
-      return l.add(n), () => {
-        l.delete(n);
+      return s.add(n), () => {
+        s.delete(n);
       };
     }
-  }, p = (e, n) => (a.push({ action: e, payload: n }), new Promise(
-    (s) => g({ action: e, payload: n }, s)
-  )), f = (e) => new Promise((n) => {
-    c((s, { action: t, payload: u }) => {
-      t in e && y((h) => {
-        e[t].call(null, s, { action: t, payload: u }), n(s);
-      });
-    });
-  }), g = ({ action: e, payload: n = {} }, s) => {
-    a.forEach(({ action: t, payload: u = {} }) => {
-      if (!(t in d))
-        console.log(`[Oni] Error -> No action [ ${t} ] found.`);
-      else {
-        const h = d[t].call(null, o, u, {
-          getState: i,
-          subscribe: c,
-          dispatch: p,
-          patternMatch: f
+  }, p = (e, n = {}) => (u.push({ action: e, payload: n }), new Promise((t) => {
+    c || h(t);
+  })), h = (e) => {
+    for (c = !0; u.length; ) {
+      const n = u.slice();
+      u = [];
+      for (const { action: t, payload: l } of n) {
+        if (!(t in i)) {
+          console.log(`[Oni] Error -> No action [ ${t} ] found.`);
+          continue;
+        }
+        const r = i[t].call(null, o, l, {
+          getState: d,
+          subscribe: f,
+          dispatch: p
         });
-        Object.assign(o, h);
+        Object.assign(o, r), s.forEach((g) => g(o, { action: t, payload: l }));
       }
-    }), a.length && (l.forEach((t) => t(o, { action: e, payload: n })), a = []), s(o);
+    }
+    c = !1, e(o);
   };
   return {
-    getState: i,
-    subscribe: c,
+    getState: d,
+    subscribe: f,
     dispatch: p,
-    patternMatch: f,
-    destroy: () => l.clear()
+    destroy: () => s.clear()
   };
 }
-const w = (r) => JSON.parse(JSON.stringify(r)), y = typeof window > "u" ? (r) => r() : (r) => requestAnimationFrame(r);
+const y = (a) => JSON.parse(JSON.stringify(a));
 export {
-  m as default
+  w as default
 };

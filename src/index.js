@@ -1,5 +1,6 @@
 export default function Oni(initialState, actions) {
     let updates = [];
+    let isFlushing = false;
     const topics = new Set();
     const state = dup(initialState);
     const getState = () => {
@@ -24,41 +25,35 @@ export default function Oni(initialState, actions) {
             };
         }
     };
-    const dispatch = (action, payload) => {
+    const dispatch = (action, payload = {}) => {
         updates.push({ action, payload });
-        return new Promise((resolve) => update({ action, payload }, resolve));
-    };
-    const patternMatch = (mapfn) => {
         return new Promise((resolve) => {
-            subscribe((s, { action, payload }) => {
-                if (action in mapfn) {
-                    rAF((_) => {
-                        mapfn[action].call(null, s, { action, payload });
-                        resolve(s);
-                    });
-                }
-            });
+            if (!isFlushing) {
+                flushQueue(resolve);
+            }
         });
     };
-    const update = ({ action, payload = {} }, resolve) => {
-        updates.forEach(({ action, payload = {} }) => {
-            if (!(action in actions)) {
-                console.log(`[Oni] Error -> No action [ ${action} ] found.`);
-            }
-            else {
+    const flushQueue = (resolve) => {
+        isFlushing = true;
+        while (updates.length) {
+            const queue = updates.slice();
+            updates = [];
+            for (const { action, payload } of queue) {
+                if (!(action in actions)) {
+                    console.log(`[Oni] Error -> No action [ ${action} ] found.`);
+                    continue;
+                }
                 const data = actions[action].call(null, state, payload, {
                     getState,
                     subscribe,
-                    dispatch,
-                    patternMatch,
+                    dispatch
                 });
                 Object.assign(state, data);
+                // notify subscribers PER ACTION
+                topics.forEach((topic) => topic(state, { action, payload }));
             }
-        });
-        if (updates.length) {
-            topics.forEach((topic) => topic(state, { action, payload }));
-            updates = [];
         }
+        isFlushing = false;
         resolve(state);
     };
     const destroy = () => topics.clear();
@@ -66,7 +61,6 @@ export default function Oni(initialState, actions) {
         getState,
         subscribe,
         dispatch,
-        patternMatch,
         destroy,
     };
 }
