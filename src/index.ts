@@ -103,8 +103,3 @@ export default function Oni(initialState: State, actions: Actions) {
 const dup = (object: State): State => {
 	return JSON.parse(JSON.stringify(object))
 }
-
-const rAF =
-	typeof window === 'undefined'
-		? (fn) => fn()
-		: (fn) => requestAnimationFrame(fn)
