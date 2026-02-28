@@ -1,47 +1,37 @@
-function w(a, i) {
-  let u = [], c = !1;
-  const s = /* @__PURE__ */ new Set(), o = y(a), d = () => o, f = (e) => {
-    if (e.call)
-      return s.add(e), () => {
-        s.delete(e);
-      };
-    {
-      const n = (t, { action: l, payload: r }) => {
-        l in e && e[l].call(null, t, { action: l, payload: r });
-      };
-      return s.add(n), () => {
-        s.delete(n);
-      };
-    }
-  }, p = (e, n = {}) => (u.push({ action: e, payload: n }), new Promise((t) => {
-    c || h(t);
-  })), h = (e) => {
-    for (c = !0; u.length; ) {
-      const n = u.slice();
-      u = [];
-      for (const { action: t, payload: l } of n) {
-        if (!(t in i)) {
-          console.log(`[Oni] Error -> No action [ ${t} ] found.`);
-          continue;
-        }
-        const r = i[t].call(null, o, l, {
-          getState: d,
+function S(c, a) {
+  let s = [], r = !1;
+  const n = /* @__PURE__ */ new Set(), e = j(c), l = () => e, f = (t) => (n.add(t), () => n.delete(t)), d = (t, i = {}) => (s.push({ action: t, payload: i }), new Promise((o) => {
+    r || b(o);
+  })), b = (t) => {
+    for (r = !0; s.length; ) {
+      const i = s.slice();
+      s = [];
+      for (const { action: o, payload: p } of i) {
+        const h = a[o];
+        if (!h) continue;
+        const u = h(e, p, {
+          getState: l,
           subscribe: f,
-          dispatch: p
+          dispatch: d
         });
-        Object.assign(o, r), s.forEach((g) => g(o, { action: t, payload: l }));
+        u && typeof u == "object" && Object.assign(e, u), n.forEach(
+          (y) => y(e, { action: o, payload: p })
+        );
       }
     }
-    c = !1, e(o);
-  };
+    r = !1, t(e);
+  }, O = () => n.clear(), g = Object.fromEntries(
+    Object.keys(a).map((t) => [t, t])
+  );
   return {
-    getState: d,
+    getState: l,
+    dispatch: d,
     subscribe: f,
-    dispatch: p,
-    destroy: () => s.clear()
+    destroy: O,
+    Actions: g
   };
 }
-const y = (a) => JSON.parse(JSON.stringify(a));
+const j = (c) => JSON.parse(JSON.stringify(c));
 export {
-  w as default
+  S as default
 };

@@ -1,73 +1,60 @@
-import { useState as g, useEffect as y } from "react";
-function b(c, d) {
+import { useState as O, useEffect as m } from "react";
+function j(r, a) {
   let t = [], o = !1;
-  const e = /* @__PURE__ */ new Set(), n = m(c), f = () => n, i = (s) => {
-    if (s.call)
-      return e.add(s), () => {
-        e.delete(s);
-      };
-    {
-      const a = (l, { action: r, payload: h }) => {
-        r in s && s[r].call(null, l, { action: r, payload: h });
-      };
-      return e.add(a), () => {
-        e.delete(a);
-      };
-    }
-  }, u = (s, a = {}) => (t.push({ action: s, payload: a }), new Promise((l) => {
-    o || p(l);
-  })), p = (s) => {
+  const s = /* @__PURE__ */ new Set(), n = w(r), i = () => n, u = (e) => (s.add(e), () => s.delete(e)), c = (e, p = {}) => (t.push({ action: e, payload: p }), new Promise((f) => {
+    o || l(f);
+  })), l = (e) => {
     for (o = !0; t.length; ) {
-      const a = t.slice();
+      const p = t.slice();
       t = [];
-      for (const { action: l, payload: r } of a) {
-        if (!(l in d)) {
-          console.log(`[Oni] Error -> No action [ ${l} ] found.`);
+      for (const { action: f, payload: b } of p) {
+        const h = a[f];
+        if (!h)
           continue;
-        }
-        const h = d[l].call(null, n, r, {
-          getState: f,
-          subscribe: i,
-          dispatch: u
+        const d = h(n, b, {
+          getState: i,
+          subscribe: u,
+          dispatch: c
         });
-        Object.assign(n, h), e.forEach((S) => S(n, { action: l, payload: r }));
+        d && typeof d == "object" && Object.assign(n, d), s.forEach((g) => g(n, { action: f, payload: b }));
       }
     }
-    o = !1, s(n);
-  };
+    o = !1, e(n);
+  }, S = () => s.clear(), y = Object.fromEntries(Object.keys(a).map((e) => [e, e]));
   return {
-    getState: f,
-    subscribe: i,
-    dispatch: u,
-    destroy: () => e.clear()
+    getState: i,
+    dispatch: c,
+    subscribe: u,
+    destroy: S,
+    Actions: y
   };
 }
-const m = (c) => JSON.parse(JSON.stringify(c)), N = (c, d) => {
-  const t = b(c, d);
+const w = (r) => JSON.parse(JSON.stringify(r)), J = (r, a) => {
+  const t = j(r, a);
   return {
     store: t,
     useStore(o) {
-      const [e, n] = g({
+      const [s, n] = O({
         state: t.getState(),
         payload: null,
         action: null
       });
-      return y(() => {
-        const f = t.subscribe((i, { action: u, payload: p }) => {
-          o && o.includes(u) ? n({ state: i, payload: p, action: u }) : o || n({ state: i, payload: p, action: u });
+      return m(() => {
+        const i = t.subscribe((u, { action: c, payload: l }) => {
+          o && o.includes(c) ? n({ state: u, payload: l, action: c }) : o || n({ state: u, payload: l, action: c });
         });
         return () => {
-          f();
+          i();
         };
       }, []), {
-        state: e.state,
-        payload: e.payload,
-        action: e.action,
+        state: s.state,
+        payload: s.payload,
+        action: s.action,
         dispatch: t.dispatch
       };
     }
   };
 };
 export {
-  N as createStore
+  J as createStore
 };

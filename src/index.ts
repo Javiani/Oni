@@ -1,105 +1,108 @@
-export type Subscription = (state: State, params: SubscriptionParams) => unknown
-export type Action = (state: object, payload: object) => State
+export type Action<State> = (
+  state: State,
+  payload: any,
+  helpers: {
+    getState(): State
+    subscribe: any
+    dispatch: any
+  }
+) => Partial<State> | void
 
-export interface State {
-	[key: string]: any
+export interface Store<State, A> {
+  getState(): State
+
+  dispatch<T extends keyof A>(
+    action: T,
+    payload?: any
+  ): Promise<State>
+
+  subscribe(fn: any): () => void
+
+  destroy(): void
+
+  Actions: {
+    [K in keyof A]: K
+  }
 }
 
-export interface Actions {
-	[key: string]: Action
+export default function Oni<
+  State extends object,
+  A extends { [K in keyof A]: Action<State> }
+>(
+  initialState: State,
+  actions: A
+): Store<State, A> {
+
+  type Key = keyof A
+
+  let updates: { action: Key; payload: any }[] = []
+  let isFlushing = false
+  const topics = new Set<Function>()
+  const state = dup(initialState)
+
+  const getState = () => state
+
+  const subscribe = (fn: any) => {
+    topics.add(fn)
+    return () => topics.delete(fn)
+  }
+
+  const dispatch: Store<State, A>["dispatch"] = (
+    action,
+    payload = {}
+  ) => {
+    updates.push({ action, payload })
+
+    return new Promise<State>((resolve) => {
+      if (!isFlushing) flushQueue(resolve)
+    })
+  }
+
+  const flushQueue = (resolve: (state: State) => void) => {
+    isFlushing = true
+
+    while (updates.length) {
+      const queue = updates.slice()
+      updates = []
+
+      for (const { action, payload } of queue) {
+        const handler = actions[action]
+        if (!handler) continue
+
+        const result = handler(state, payload, {
+          getState,
+          subscribe,
+          dispatch
+        })
+
+        if (result && typeof result === "object") {
+          Object.assign(state, result)
+        }
+
+        topics.forEach((t) =>
+          t(state, { action, payload })
+        )
+      }
+    }
+
+    isFlushing = false
+    resolve(state)
+  }
+
+  const destroy = () => topics.clear()
+
+  const Actions = Object.fromEntries(
+    Object.keys(actions).map(k => [k, k])
+  ) as { [K in keyof A]: K }
+
+  return {
+    getState,
+    dispatch,
+    subscribe,
+    destroy,
+    Actions
+  }
 }
 
-export interface SubscriptionParams {
-	action: string
-	payload: object
-}
-
-export interface Store {
-	getState(): State
-	subscribe(fn: Subscription): Function
-	dispatch(action: keyof Actions, payload?: object): Promise<unknown>
-	destroy(): void
-}
-
-export default function Oni(initialState: State, actions: Actions) {
-	let updates: SubscriptionParams[] = []
-	let isFlushing = false
-	const topics: Set<Function> = new Set()
-	const state = dup(initialState)
-
-	const getState = () => {
-		return state
-	}
-
-	const subscribe = (fnorObject) => {
-		if (fnorObject.call) {
-			topics.add(fnorObject)
-			return () => {
-				topics.delete(fnorObject)
-			}
-		} else {
-			const callback = (s, { action, payload }) => {
-				if (action in fnorObject) {
-					fnorObject[action].call(null, s, { action, payload })
-				}
-			}
-			topics.add(callback)
-			return () => {
-				topics.delete(callback)
-			}
-		}
-	}
-
-	const dispatch = (action, payload = {}) => {
-		updates.push({ action, payload })
-
-		return new Promise((resolve) => {
-			if (!isFlushing) {
-				flushQueue(resolve)
-			}
-		})
-	}
-
-	const flushQueue = (resolve) => {
-		isFlushing = true
-
-		while (updates.length) {
-			const queue = updates.slice()
-			updates = []
-
-			for (const { action, payload } of queue) {
-				if (!(action in actions)) {
-					console.log(`[Oni] Error -> No action [ ${action} ] found.`)
-					continue
-				}
-
-				const data = actions[action].call(null, state, payload, {
-					getState,
-					subscribe,
-					dispatch
-				})
-
-				Object.assign(state, data)
-
-				// notify subscribers PER ACTION
-				topics.forEach((topic) => topic(state, { action, payload }) )
-			}
-		}
-
-		isFlushing = false
-		resolve(state)
-	}
-
-	const destroy = () => topics.clear()
-
-	return {
-		getState,
-		subscribe,
-		dispatch,
-		destroy,
-	} as Store
-}
-
-const dup = (object: State): State => {
-	return JSON.parse(JSON.stringify(object))
-}
+const dup = <T>(obj: T): T =>
+  JSON.parse(JSON.stringify(obj))
